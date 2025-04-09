@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="main-wrapper">
+    <!-- Left Container with Illustration -->
+    <div class="illustration-container">
+        <img src="{% static 'accounts/images/Login-amico.png' %}" alt="Illustration" class="illustration-img">
+    </div>
+
+    <!-- Right Container with Login Form -->
+    <div class="form-container">
+        <h1 class="form-title">Student Login</h1>
+
+        <div class="form-logo">
+            <img src="{% static 'accounts/images/login.jpeg' %}" alt="School Logo" class="logo-image">
+        </div>
+
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+
+            {% if form.errors %}
+                <div class="form-errors">
+                    Please correct the password or username below.
+                </div>
+            {% endif %}
+
+            <div class="form-row">
+                <label for="id_username" class="form-label"><b>Username:</b></label>
+                <div class="form-input">
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                        <div class="error">{{ form.username.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label for="id_password" class="form-label"><b>Password:</b></label>
+                <div class="form-input">
+                    {{ form.password }}
+                    {% if form.password.errors %}
+                        <div class="error">{{ form.password.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-footer">
+                <button type="submit" class="submit-btn">Login</button>
+                <p class="login-link">Don't have an account? <a href="{% url 'accounts:register' %}">Register here</a></p>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

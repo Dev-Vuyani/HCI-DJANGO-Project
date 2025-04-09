@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main-wrapper">
+    <!-- Left Container with Illustration -->
+    <div class="illustration-container">
+        <img src="{% static 'accounts/images/TRACK.png' %}" alt="Illustration" class="illustration-img">
+        <!-- Back Button with Redirect -->
+        <button id="backButton" class="back-button">← Back to Dashboard</button>
+    </div>
+
+    <!-- Right Container for Progress Content -->
+    <div class="progress-container">
+        <h2>📊 Your Study Progress</h2>
+
+        <div class="progress-item">
+            <h3>🗂️ Study Plans Created:</h3>
+            <p>4</p>
+        </div>
+
+        <div class="progress-item">
+            <h3>✅ Completed Daily Tasks:</h3>
+            <p>12</p>
+        </div>
+
+        <div class="progress-item">
+            <h3>🕒 Pending Daily Tasks:</h3>
+            <p>3</p>
+        </div>
+
+        <div class="progress-item">
+            <h3>📅 Deadlines Added:</h3>
+            <p>5</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .back-button {
+        position: absolute;
+        bottom: -85px;
+        left: 5px;
+        padding: 4px 7px;
+        background-color: #4a6bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s;
+    }
+    
+    .back-button:hover {
+        background-color: #4caf50;
+    }
+    
+    .illustration-container {
+        position: relative; /* Needed for absolute positioning of the button */
+    }
+
+.progress-container:hover {
+    box-shadow: 0 0 15px 4px rgba(0, 255, 0, 0.6); /* green glow on hover */
+}
+    .progress-container {
+        max-width: 600px;
+    margin: 30px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.progress-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: #333;
+}
+
+.progress-item {
+    background-color: #fff;
+    margin: 10px 0;
+    padding: 10px;
+    border-left: 4px solid #4CAF50;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.progress-item h3 {
+    margin: 0 0 10px;
+    font-size: 1.2rem;
+}
+
+.progress-item p {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+}
+</style>
+<script>
+    document.getElementById('backButton').addEventListener('click', function() {
+        // Show redirecting message
+        this.textContent = "Redirecting...";
+        
+        // Redirect after a brief delay (1 second)
+        setTimeout(function() {
+            window.location.href = "/accounts/login_success/";  // Updated path
+        }, 1000);
+    });
+</script>
+{% endblock %}

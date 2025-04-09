@@ -1,0 +1,263 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="logo">
+    <img src="{% static 'accounts/images/SPU.jpeg' %}" alt="StudyBuddy Logo">
+</div>
+<!-- Dropdown Menu at Top Right -->
+<div class="dropdown-container">
+    <button class="dropdown-btn">App Features ▼</button>
+    <div class="dropdown-content">
+        <div class="dropdown-feature">
+            <h3>📚 Study Planner</h3>
+            <p>Organize your modules and study time efficiently</p>
+        </div>
+        <div class="dropdown-feature">
+            <h3>⏰ Deadline Tracker</h3>
+            <p>Never miss an assignment due date</p>
+        </div>
+        <div class="dropdown-feature">
+            <h3>📝 Daily Tasks</h3>
+            <p>Stay on top of your daily academic goals</p>
+        </div>
+        <div class="dropdown-feature">
+            <h3>📈 Track Progress</h3>
+            <p>Monitor your growth and study performance over time</p>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content Container -->
+<div class="home-container">
+    <h1>Welcome to StudyBuddy</h1>
+    <h3><i>"Study Smarter, Stay Stronger – Your Ultimate Academic Companion!"</i></h3>
+
+    <p><b>StudyBuddy</b> helps students build better study plans, track deadlines, and stay organized—while boosting mental wellness with motivation, study tips, and smart break reminders. Study smarter, stress less!</p>
+
+    <div class="hero-image">
+        <img src="{% static 'accounts/images/studying.jpeg' %}" alt="Students studying">
+    </div>
+
+    <!-- Only the Register Button inside -->
+    <div class="auth-buttons">
+        <a href="{% url 'accounts:register' %}" class="home-btn register-btn">
+            Get Started - Register →
+        </a>
+    </div>
+</div>
+
+<!-- Login button centered below the container -->
+<div class="login-center">
+    <a href="{% url 'accounts:login' %}" class="home-btn login-btn">
+        Already have an account? Login
+    </a>
+</div>
+
+
+<style>
+/* Dropdown Styles */
+.dropdown-container {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    z-index: 1000;
+}
+
+.dropdown-btn {
+    background: #2ECC40;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.dropdown-btn:hover {
+    background: #0d2b6b;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: white;
+    min-width: 300px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    border-radius: 5px;
+    padding: 15px;
+    z-index: 1;
+}
+
+.dropdown-container:hover .dropdown-content,
+.dropdown-container:focus-within .dropdown-content {
+    display: block;
+}
+
+.dropdown-feature {
+    padding: 10px;
+    margin: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.dropdown-feature:last-child {
+    border-bottom: none;
+}
+
+.dropdown-feature h3 {
+    margin: 0 0 5px 0;
+    color: #1a3a8f;
+}
+
+.dropdown-feature p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* Main Container Styles */
+.home-container {
+    text-align: center;
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.home-container h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.home-container p {
+    margin-bottom: 0.5rem;
+}
+
+.auth-buttons {
+    margin-top: 30px;
+}
+
+.home-btn {
+    display: inline-block;
+    padding: 12px 30px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.register-btn {
+    background: #1a3a8f;
+    color: white;
+}
+
+.register-btn:hover {
+    background: #0d2b6b;
+    transform: translateY(-2px);
+}
+
+.login-btn {
+    margin-top: 5px;
+    background: #f8f9fa;
+    color: #1a3a8f;
+    border: 2px solid #1a3a8f;
+}
+
+.login-btn:hover {
+    background: #e9ecef;
+}
+
+.hero-image img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin: 20px 0;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .dropdown-container {
+        position: static;
+        margin: 0 auto 20px auto;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .dropdown-content {
+        position: relative;
+        width: 100%;
+    }
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* Replace background-color with image */
+    background-image: url('{% static "accounts/images/background.jpg" %}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.logo img {
+    height: 110px;
+    width: auto;
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    z-index: 1000;
+}
+
+/* Optional: Tweak margins */
+.auth-buttons {
+    margin-top: 20px;
+}
+
+/* Center the login button under the main content */
+.login-center {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Optional: Add spacing or animation for arrow */
+.register-btn {
+    position: relative;
+    padding-right: 30px;
+}
+
+.register-btn::after {
+    
+    position: absolute;
+    right: 15px;
+    font-size: 1.1rem;
+}
+</style>
+
+<script>
+// Optional JavaScript for better mobile interaction
+document.addEventListener('DOMContentLoaded', function() {
+    const dropdownBtn = document.querySelector('.dropdown-btn');
+    const dropdownContent = document.querySelector('.dropdown-content');
+    
+    dropdownBtn.addEventListener('click', function() {
+        if (dropdownContent.style.display === 'block') {
+            dropdownContent.style.display = 'none';
+            dropdownBtn.innerHTML = 'Features ▼';
+        } else {
+            dropdownContent.style.display = 'block';
+            dropdownBtn.innerHTML = 'Features ▲';
+        }
+    });
+});
+</script>
+{% endblock %}

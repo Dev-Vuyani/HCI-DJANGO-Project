@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+{% load static %}
+<style>
+    body { background-color: lightblue !important; }
+</style>
+{% block content %}
+<div class="dashboard-container">
+    <div class="profile-container">
+        <img src="{% static 'accounts/images/login.jpeg' %}" alt="Profile Picture" class="profile-pic">
+        <div class="welcome-msg">Welcome, {{ user.username }}!</div>
+        <button class="motivation-btn" onclick="showMotivation()">💪 Get Motivation</button>
+    </div>
+    <h1>Study-Buddy Dashboard</h1>
+    
+    
+    <div class="sections-container">
+        <!-- Section 1 -->
+        <div class="dashboard-section" onclick="window.location.href='/accounts/create-plan/'">
+            <div class="section-content">
+                <h3>Create Plan</h3>
+                <img src="{% static 'accounts/images/s_logo.jpeg' %}" alt="Plan" class="section-icon">
+                <p>Organize your study modules.</p>
+                <button type="button" class="submit-btn">Create Plan</button>
+            </div>
+        </div>
+
+        <!-- Section 2 -->
+        <div class="dashboard-section" onclick="window.location.href='/accounts/daily-tasks/'">
+            <div class="section-content">
+                <h3>Create Daily Task</h3>
+                <img src="{% static 'accounts/images/task.jpeg' %}" alt="Task" class="section-icon">
+                <p>Create your daily tasks.</p>
+                <button type="button" class="submit-btn">Create Task</button>
+            </div>
+        </div>
+
+        <!-- Section 3 -->
+        <div class="dashboard-section" onclick="window.location.href='/accounts/deadlines/'">
+            <div class="section-content">
+                <h3>Assignment Deadlines</h3>
+                <img src="{% static 'accounts/images/deadline.jpeg' %}" alt="Deadlines" class="section-icon">
+                <p>Track your deadline here</p>
+                <button type="button" class="submit-btn">Calendar</button>
+            </div>
+        </div>
+
+        <!-- Section 4 -->
+        <div class="dashboard-section" onclick="window.location.href='/accounts/track-progress/'">
+            <div class="section-content">
+                <h3>Track Progress</h3>
+                <img src="{% static 'accounts/images/progress.jpeg' %}" alt="Progress" class="section-icon">
+                <p>Track your study progress.</p>
+                <button type="button" class="submit-btn">Track Progress</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="logout-container">
+        <a href="{% url 'logout' %}" class="logout-btn">Logout -></a>
+    </div>
+
+    <!-- Forum Discussion Display Only - Bottom Right -->
+<div class="forum-display">
+    <img src="{% static 'accounts/images/Forum.jpeg' %}" alt="Forum Icon" class="forum-icon">
+    <button class="forum-btn">Join Forum Discussion</button>
+</div>
+</div>
+
+<style>
+.profile-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-pic {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    margin-bottom: 8px;
+}
+
+.welcome-msg {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.motivation-btn {
+    background-color: #2ECC40;
+    color: white;
+    padding: 6px 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background-color 0.3s ease;
+}
+
+.motivation-btn:hover {
+    background-color: #0056b3;
+}
+/* Forum Display (Bottom Right) */
+.forum-display {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    text-align: center;
+    z-index: 1000;
+}
+
+.forum-icon {
+    width: 40px;
+    height: 40px;
+    display: block;
+    margin: 0 auto 5px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    
+}
+
+.forum-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 14px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    cursor: default;
+    opacity: 0.9;
+}
+
+
+</style>
+<script>
+    function showMotivation() {
+        const messages = [
+            "🌟 You're doing great! Keep going!",
+            "📚 Every step counts — stay focused!",
+            "🔥 You’ve got this! One task at a time!",
+            "💪 Progress is progress, no matter how small!",
+            "🧠 Smart work beats hard work. Keep it up!",
+            "🚀 Your goals are closer than you think!",
+            "🎯 Consistency wins. You’re on the right track!"
+        ];
+    
+        const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+    
+        const motivationPopup = document.createElement("div");
+        motivationPopup.innerHTML = `<strong style="font-size: 1.2rem;">${randomMessage}</strong>`;
+        motivationPopup.style.position = "fixed";
+        motivationPopup.style.top = "20%";
+        motivationPopup.style.left = "50%";
+        motivationPopup.style.transform = "translateX(-50%)";
+        motivationPopup.style.backgroundColor = "#fff";
+        motivationPopup.style.padding = "16px 24px";
+        motivationPopup.style.borderRadius = "12px";
+        motivationPopup.style.boxShadow = "0 4px 12px rgba(0,0,0,0.2)";
+        motivationPopup.style.zIndex = "9999";
+        motivationPopup.style.color = "#333";
+        motivationPopup.style.textAlign = "center";
+    
+        document.body.appendChild(motivationPopup);
+    
+        setTimeout(() => {
+            motivationPopup.remove();
+        }, 5000); // disappears after 5 seconds
+    }
+    </script>
+    
+{% endblock %}

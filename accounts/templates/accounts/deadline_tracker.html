@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main-wrapper">
+    <!-- Left Container with Illustration -->
+    <div class="illustration-container">
+        <img src="{% static 'accounts/images/Task-rafiki.png' %}" alt="Illustration" class="illustration-img">
+        <button id="backButton" class="back-button">← Back to Dashboard</button>
+    </div>
+
+    <!-- Right Container for Deadline Manager -->
+    <div class="task-manager-container">
+        <h2>Assignment Deadlines</h2>
+
+        <div class="deadline-form">
+            <h3>Add New Deadline</h3>
+            <div class="form-group">
+                <label>Assignment Name:</label>
+                <input type="text" id="assignmentName" class="form-input">
+            </div>
+            <div class="form-group">
+                <label>Due Date:</label>
+                <input type="date" id="dueDate" class="form-input">
+            </div>
+            <button onclick="addDeadline()" class="submit-btn">Add Deadline</button>
+        </div>
+
+        <div class="deadline-list">
+            <h3>📅 Your Deadlines</h3>
+            <div id="deadlinesList">
+                <!-- Deadlines will appear here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .back-button {
+        position: absolute;
+        bottom: -85px;
+        left: 5px;
+        padding: 4px 7px;
+        background-color: #4a6bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s;
+    }
+    
+    .back-button:hover {
+        background-color: #4caf50;
+    }
+    
+    .illustration-container {
+        position: relative; /* Needed for absolute positioning of the button */
+    }
+    .task-manager-container.glow {
+       box-shadow: 0 0 15px 4px rgba(0, 255, 0, 0.6); /* green glow */
+       transition: box-shadow 0.3s ease;
+   }
+</style>
+
+<script>
+function addDeadline() {
+    const name = document.getElementById('assignmentName');
+    const date = document.getElementById('dueDate');
+    
+    if (!name.value || !date.value) return;
+    
+    const deadlineElement = document.createElement('div');
+    deadlineElement.className = 'deadline-item';
+    deadlineElement.innerHTML = `
+        <span class="deadline-name">${name.value}</span>
+        <span class="deadline-date">Due: ${date.value}</span>
+        <button class="delete-btn" onclick="this.parentNode.remove()">
+            <img src="{% static 'accounts/images/bin.jpeg' %}" alt="Delete" width="16">
+        </button>
+    `;
+    
+    document.getElementById('deadlinesList').appendChild(deadlineElement);
+    name.value = '';
+    date.value = '';
+}
+document.addEventListener("DOMContentLoaded", function() {
+        const inputs = document.querySelectorAll(".form-input");
+        const container = document.querySelector(".task-manager-container");
+
+        inputs.forEach(input => {
+            input.addEventListener("focus", () => {
+                container.classList.add("glow");
+            });
+
+            input.addEventListener("blur", () => {
+                // Check if any input is still focused
+                const anyFocused = Array.from(inputs).some(i => i === document.activeElement);
+                if (!anyFocused) {
+                    container.classList.remove("glow");
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

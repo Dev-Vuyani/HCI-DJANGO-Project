@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+<div class="main-wrapper">
+    <!-- Left Container with Illustration -->
+    <div class="illustration-container">
+        <img src="{% static 'accounts/images/Sign up-rafiki.png' %}" alt="Illustration" class="illustration-img">
+    </div>
+<div class="form-container">
+    <h1 class="form-title">Student Registration</h1>
+
+     <!-- Add this image tag below the heading -->
+     <div class="form-logo">
+        <img src="{% static 'accounts/images/reg.jpeg' %}" alt="School Logo" class="logo-image">
+    </div>
+    
+    <form method="post" class="auth-form">
+        {% csrf_token %}
+        
+        {% if form.errors %}
+            <div class="form-errors">
+                Please correct the errors below.
+            </div>
+        {% endif %}
+        
+        <div class="form-row">
+            <label for="id_full_name" class="form-label"><b>Full Name:</b></label>
+            <div class="form-input">
+                {{ form.full_name }}
+                {% if form.full_name.errors %}
+                    <div class="error">{{ form.full_name.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Repeat this pattern for all other fields -->
+        <div class="form-row">
+            <label for="id_email" class="form-label"><b>Email:</b></label>
+            <div class="form-input">
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <div class="error">{{ form.email.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="form-row">
+            <label for="id_username" class="form-label"><b>Username:</b></label>
+            <div class="form-input">
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <div class="error">{{ form.username.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="form-row">
+            <label for="id_student_id" class="form-label"><b>Student ID:</b></label>
+            <div class="form-input">
+                {{ form.student_id }}
+                {% if form.student_id.errors %}
+                    <div class="error">{{ form.student_id.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="form-row">
+            <label for="id_password1" class="form-label"><b>Password:</b></label>
+            <div class="form-input">
+                {{ form.password1 }}
+                {% if form.password1.errors %}
+                    <div class="error">{{ form.password1.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="form-row">
+            <label for="id_password2" class="form-label"><b>Confirm Password:</b></label>
+            <div class="form-input">
+                {{ form.password2 }}
+                {% if form.password2.errors %}
+                    <div class="error">{{ form.password2.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="form-footer">
+            <button type="submit" class="submit-btn">Register</button>
+            <p class="login-link">Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+        </div>
+    </form>
+</div>
+{% endblock %}

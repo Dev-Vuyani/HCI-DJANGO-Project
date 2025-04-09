@@ -1,0 +1,263 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main-wrapper">
+    <!-- Left Container with Illustration -->
+    <div class="illustration-container">
+        <img src="{% static 'accounts/images/Work time-rafiki.png' %}" alt="Illustration" class="illustration-img">
+
+        <div class="forum-display">
+            <img src="{% static 'accounts/images/Chat.jpeg' %}" alt="Forum Icon" class="forum-icon">
+            <button class="forum-btn">Need help? Ask StudyBot</button>
+        </div>
+    
+    </div>
+    <button class="stress-btn" onclick="showStressRelief()">😌 Need a Break?</button>
+<div class="task-manager-container">
+
+    <div class="task-progress-container">
+        <div id="progressText"><b>0/0 tasks completed</b></div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressBar"></div>
+        </div>
+        <div id="encouragementMessage"></div>
+    </div>
+    
+    <h2>Daily Task Manager</h2>
+    
+    <div class="task-input-container">
+        <input type="text" id="taskInput" placeholder="Enter task..." class="task-input" oninput="toggleButtonState()">
+        <button id="addTaskBtn" class="add-task-btn" onclick="addTask()" disabled>+ Add</button>
+    </div>
+    
+    <div class="task-list" id="taskList">
+        <!-- Tasks will appear here -->
+    </div>
+</div>
+
+<style>
+    
+    .task-manager-container.glow {
+        box-shadow: 0 0 15px 4px rgba(0, 255, 0, 0.6); /* green glow */
+        transition: box-shadow 0.3s ease;
+    }
+
+    .stress-btn {
+        position: absolute;
+        bottom: 20px;
+        right: 80px;
+        padding: 10px 18px;
+        background-color: #fff;
+        border: 2px solid #4CAF50;
+        color: #4CAF50;
+        border-radius: 10px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .stress-btn:hover {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+
+    .add-task-btn {
+        background-color: grey;  /* Default grey when disabled */
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: not-allowed;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    /* Forum Display (Bottom Right) */
+    .illustration-container {
+    position: relative; /* Required for absolute positioning inside */
+    text-align: center;
+}
+
+.forum-display {
+    position: absolute;
+    bottom: -95px;
+    right: -110%;
+    transform: translateX(-10%); /* Center horizontally */
+    text-align: center;
+    z-index: 1000;
+}
+
+.forum-icon {
+    width: 40px;
+    height: 40px;
+    display: block;
+    margin: 0 auto 5px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+
+
+.forum-btn {
+    background: #1a3a8f;
+    color: white;
+    border: none;
+    padding: 12px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+    transition: background 0.3s;
+}
+
+.forum-btn:hover {
+    background: #4CAF50;
+}
+
+    </style>
+    
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const inputs = document.querySelectorAll(".task-input");
+        const container = document.querySelector(".task-manager-container");
+
+        inputs.forEach(input => {
+            input.addEventListener("focus", () => {
+                container.classList.add("glow");
+            });
+
+            input.addEventListener("blur", () => {
+                // Check if any input is still focused
+                const anyFocused = Array.from(inputs).some(i => i === document.activeElement);
+                if (!anyFocused) {
+                    container.classList.remove("glow");
+                }
+            });
+        });
+    });
+    function updateProgress() {
+        const checkboxes = document.querySelectorAll('.task-item input[type="checkbox"]');
+        const total = checkboxes.length;
+        const completed = [...checkboxes].filter(cb => cb.checked).length;
+    
+        // Update text
+        document.getElementById('progressText').textContent = `${completed}/${total} tasks completed`;
+    
+        // Update progress bar
+        const progressBar = document.getElementById('progressBar');
+        const percent = total === 0 ? 0 : (completed / total) * 100;
+        progressBar.style.width = `${percent}%`;
+    
+        // Encouragement messages
+        const message = document.getElementById('encouragementMessage');
+        if (completed === 0) {
+            message.textContent = '';
+        } else if (completed === total) {
+            message.textContent = "🎉 All done! Great job!";
+        } else if (completed === 1) {
+            message.textContent = "👍 One down, keep it up!";
+        } else if (completed === 2) {
+            message.textContent = "🔥 Two down, you're doing great!";
+        } else {
+            message.textContent = "Keep going! You're making progress!";
+        }
+    }
+    
+    window.onload = function() {
+        toggleButtonState(); // Make sure button starts as disabled
+    };
+
+    // Function to toggle the button state based on the input
+    function toggleButtonState() {
+        const input = document.getElementById('taskInput');
+        const button = document.getElementById('addTaskBtn');
+        if (input.value.trim() === '') {
+            button.disabled = true;  // Disable button and grey it out
+            button.style.backgroundColor = 'grey'; // Grey color when disabled
+        } else {
+            button.disabled = false;  // Enable button and set blue color
+            button.style.backgroundColor = 'blue';
+        }
+    }
+
+    function addTask() {
+        const input = document.getElementById('taskInput');
+        if (input.value.trim() === '') return;  // Don't add task if input is empty
+
+        const taskList = document.getElementById('taskList');
+        const taskElement = document.createElement('div');
+        taskElement.className = 'task-item';
+        taskElement.innerHTML = `
+            <label>
+                <input type="checkbox" onchange="toggleTask(this)">
+                <span class="task-text">${input.value}</span>
+            </label>
+            <button class="delete-btn" onclick="deleteTask(this)">
+                <img src="{% static 'accounts/images/bin.jpeg' %}" alt="Delete" width="16">
+            </button>
+        `;
+        taskList.appendChild(taskElement);
+        input.value = '';  // Clear input field
+        toggleButtonState();  // Recheck the button state
+    }
+
+    // Function to toggle task completion
+    function toggleTask(checkbox) {
+        checkbox.parentNode.style.textDecoration = checkbox.checked ? 'line-through' : 'none';
+    }
+
+    // Function to delete a task
+    function deleteTask(button) {
+        button.parentNode.remove();
+        toggleButtonState();  // Recheck the button state after deleting a task
+    }
+    
+    function toggleTask(checkbox) {
+        checkbox.parentNode.style.textDecoration = checkbox.checked ? 'line-through' : 'none';
+        updateProgress();
+    }
+    
+    function deleteTask(button) {
+        button.parentNode.remove();
+        updateProgress();
+    }
+
+    function showStressRelief() {
+    const messages = [
+        "🌿 Let's take a 15-minute walk. You got this!",
+        "🧘‍♂️ Breathe in, breathe out. You've earned a quick break.",
+        "☕ Time for a cup of tea and a stretch!",
+        "📴 Step away for 10 minutes — your brain will thank you!",
+        "🌞 A little sunshine can do wonders. Go outside for a bit!"
+    ];
+
+    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+
+    const popup = document.createElement("div");
+    popup.innerHTML = `<strong style="font-size: 1.2rem;">${randomMessage}</strong>`;
+    popup.style.position = "fixed";
+    popup.style.top = "20%";
+    popup.style.left = "50%";
+    popup.style.transform = "translateX(-50%)";
+    popup.style.backgroundColor = "#fff";
+    popup.style.padding = "16px 24px";
+    popup.style.borderRadius = "12px";
+    popup.style.boxShadow = "0 4px 12px rgba(0,0,0,0.2)";
+    popup.style.zIndex = "9999";
+    popup.style.color = "#333";
+    popup.style.textAlign = "center";
+
+    document.body.appendChild(popup);
+
+    setTimeout(() => {
+        popup.remove();
+    }, 5000); // disappears after 5 seconds
+}
+    </script>
+    
+{% endblock %}

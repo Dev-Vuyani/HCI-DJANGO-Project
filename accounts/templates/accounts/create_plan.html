@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main-wrapper">
+    <!-- Left Container with Illustration -->
+    <div class="illustration-container">
+        <img src="{% static 'accounts/images/Studying-rafiki.png' %}" alt="Illustration" class="illustration-img">
+        <button id="backButton" class="back-button">← Back to Dashboard</button>
+    </div>
+
+<div class="plan-container">
+    <h2>Study Plan Creator</h2>
+    <p class="subtitle">Enter your modules for the semester</p>
+    
+    <form class="module-form" id="studyPlanForm">
+        {% for i in "12345"|make_list %}
+        <div class="module-input">
+            <label>Module {{ i }}:</label>
+            <input type="text" placeholder="Enter module name" class="module-name">
+        </div>
+        {% endfor %}
+        
+        <button type="button" onclick="generatePlan()" class="submit-plan-btn">Generate Study Plan</button>
+    </form>
+    
+    <div id="studySchedule" class="study-schedule" style="display: none;">
+        <h3>Suggested Weekly Study Plan</h3>
+        <div id="scheduleContent"></div>
+    </div>
+</div>
+
+<style>
+     .plan-container.glow {
+        box-shadow: 0 0 15px 4px rgba(0, 255, 0, 0.6); /* green glow */
+        transition: box-shadow 0.3s ease;
+    }
+
+    .back-button {
+        position: absolute;
+        bottom: -35px;
+        left: 45px;
+        padding: 4px 7px;
+        background-color: #4a6bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s;
+    }
+    
+    .back-button:hover {
+        background-color: #4caf50;
+    }
+    .illustration-container {
+        position: relative; /* Needed for absolute positioning of the button */
+    }
+</style>
+
+<script>
+function generatePlan() {
+    const modules = [];
+    document.querySelectorAll('.module-name').forEach(input => {
+        if (input.value.trim()) modules.push(input.value.trim());
+    });
+    
+    if (modules.length === 0) {
+        alert('Please enter at least one module');
+        return;
+    }
+    
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    const studyTimes = [
+        { period: 'Morning', time: '8:00-10:00', duration: '2 hours' },
+        { period: 'Afternoon', time: '13:00-15:00', duration: '2 hours' },
+        { period: 'Evening', time: '18:00-20:00', duration: '2 hours' }
+    ];
+    
+    let scheduleHTML = '<div class="schedule-grid">';
+    
+    modules.forEach((module, index) => {
+        const day = days[index % days.length];
+        const timeSlot = studyTimes[index % studyTimes.length];
+        
+        scheduleHTML += `
+            <div class="schedule-item">
+                <strong>${day} ${timeSlot.period} (${timeSlot.time}):</strong>
+                <div>Study ${module} for ${timeSlot.duration}</div>
+                <div class="break-suggestion">Take a 15-minute break after 1 hour</div>
+            </div>
+        `;
+    });
+    
+    scheduleHTML += '</div>';
+    document.getElementById('scheduleContent').innerHTML = scheduleHTML;
+    document.getElementById('studySchedule').style.display = 'block';
+    document.getElementById('studySchedule').scrollIntoView({ behavior: 'smooth' });
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+        const inputs = document.querySelectorAll(".module-name");
+        const container = document.querySelector(".plan-container");
+
+        inputs.forEach(input => {
+            input.addEventListener("focus", () => {
+                container.classList.add("glow");
+            });
+
+            input.addEventListener("blur", () => {
+                // Check if any input is still focused
+                const anyFocused = Array.from(inputs).some(i => i === document.activeElement);
+                if (!anyFocused) {
+                    container.classList.remove("glow");
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
